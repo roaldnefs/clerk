@@ -1,45 +1,17 @@
 package main
 
-import(
-  "fmt"
-  "io/ioutil"
+import (
+	"os"
 
-  "gopkg.in/alecthomas/kingpin.v2"
-  "github.com/containers/image/v5/signature"
-)
-
-var (
-  manifestPath    = kingpin.Arg("manifest", "Path to a file containing the image manifest.").Required().String()
-  dockerReference = kingpin.Arg("docker-reference", "Docker reference to identify the image with.").Required().String()
-  fingerprint     = kingpin.Arg("key-fingerprint", "GPG key identity to use for signing.").Required().String()
-  outputPath      = kingpin.Flag("output", "Output file.").Required().String()
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 func main() {
-  kingpin.Version("0.0.1")
-  kingpin.Parse()
+	app := kingpin.New("clerk", "Command line utility that can create and verify signatures of a Docker image using GPG.")
+	app.Version("0.0.1")
 
-  manifest, err := ioutil.ReadFile(*manifestPath)
-  if err != nil {
-    fmt.Printf("Error reading %s: %v\n", *manifestPath, err)
-    return
-	}
+	signCmd(app)
+	verifyCmd(app)
 
-  mech, err := signature.NewGPGSigningMechanism()
-  if err != nil {
-    fmt.Printf("Error initializing GPG: %v\n", err)
-    return
-  }
-  defer mech.Close()
-
-  signature, err := signature.SignDockerManifest(manifest, *dockerReference, mech, *fingerprint)
-  if err != nil {
-    fmt.Printf("Error creating signature: %v\n", err)
-    return
-  }
-
-  if err := ioutil.WriteFile(*outputPath, signature, 0644); err != nil {
-    fmt.Printf("Error writing signature to %s: %v", *outputPath, err)
-    return
-	}
+	kingpin.MustParse(app.Parse(os.Args[1:]))
 }

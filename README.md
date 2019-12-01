@@ -5,7 +5,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/roaldnefs/clerk/total.svg)](https://github.com/roaldnefs/clerk/releases)
 [![GitHub](https://img.shields.io/github/license/roaldnefs/clerk.svg)](https://github.com/roaldnefs/clerk/blob/master/LICENSE)
 
-`clerk` is a command line utility that can create signatures of a Docker image using GPG. 
+`clerk` is a command line utility that can create and verify signatures of a Docker image using GPG. 
 
 **Note:** this utility is for testing purposes only, do not use this in production!
 
@@ -29,17 +29,23 @@ $ go get github.com/roaldnefs/clerk
 ## Usage
 
 ```
-usage: clerk --output=OUTPUT [<flags>] <manifest> <docker-reference> <key-fingerprint>
+usage: clerk [<flags>] <command> [<args> ...]
+
+Command line utility that can create and verify signatures of a Docker image using GPG.
 
 Flags:
-  --help           Show context-sensitive help (also try --help-long and --help-man).
-  --output=OUTPUT  Output file.
-  --version        Show application version.
+  --help     Show context-sensitive help (also try --help-long and --help-man).
+  --version  Show application version.
 
-Args:
-  <manifest>          Path to a file containing the image manifest.
-  <docker-reference>  Docker reference to identify the image with.
-  <key-fingerprint>   GPG key identity to use for signing.
+Commands:
+  help [<command>...]
+    Show help.
+
+  sign --output=OUTPUT <manifest> <docker-reference> <key-fingerprint>
+    Sign a Docker image.
+
+  verify <signature>
+    Verify a Docker image.
 ```
 
 ## Authors
