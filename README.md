@@ -44,7 +44,7 @@ Commands:
   sign --output=OUTPUT <manifest> <docker-reference> <key-fingerprint>
     Sign a Docker image.
 
-  verify <signature>
+  verify <manifest> <docker-reference> <key-fingerprint> <signature>
     Verify a Docker image.
 ```
 
